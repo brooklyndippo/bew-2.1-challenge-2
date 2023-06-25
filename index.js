@@ -19,6 +19,10 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     io.emit('user disconnected');
   })
+
+  socket.on('typing', () => {
+    io.emit('typing');
+  })
 });
 
 server.listen(3000, () => {

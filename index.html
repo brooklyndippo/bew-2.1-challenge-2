@@ -13,10 +13,12 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages > li { padding: 0.5rem 1rem; }
       #messages > li:nth-child(odd) { background: #efefef; }
+      #user-typing { display: none; padding: 0.5rem 1rem; position: fixed; bottom: 3rem; left: 0; right: 0; text-align: center; }
     </style>
   </head>
   <body>
     <ul id="messages"></ul>
+    <p id="user-typing"><i>A user is typing....</i></p>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
@@ -27,6 +29,7 @@
       var messages = document.getElementById('messages');
       var form = document.getElementById('form');
       var input = document.getElementById('input');
+      var userTyping = document.getElementById('user-typing');
     
       form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -55,6 +58,17 @@
         item.textContent = 'A user has left the chatroom.';
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
+      });
+
+      input.addEventListener('input', function(e) {
+        socket.emit('typing');
+      });
+
+      socket.on('typing', function() {
+        userTyping.style.display = "block";
+        setTimeout(function() {
+          userTyping.style.display = "none";
+        }, 2000);
       });
 
     </script>
